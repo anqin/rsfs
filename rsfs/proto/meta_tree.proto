@@ -1,0 +1,17 @@
+import "status_code.proto"; 
+import "snode_info.proto";
+
+package rsfs;
+
+message TreeNode {
+    required uint64 fid = 1;
+    required string name = 2;
+    required StatusCode status = 3;
+    required uint64 file_size = 4;
+    repeated SNodeInfo chunks = 5;
+    optional uint32 chunk_num = 6;
+    optional int64 tail_slice = 7 [default = -1];
+    optional int64 tail_num = 8;
+    optional int64 crash_slice = 9 [default = -1];
+    optional uint32 crash_num = 10 [default = 0];
+}

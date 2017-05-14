@@ -1,0 +1,9 @@
+import "status_code.proto";
+
+package rsfs;
+
+message SNodeInfo {
+    required string addr = 1;
+    required StatusCode status = 2; 
+}
+

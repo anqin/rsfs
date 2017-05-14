@@ -1,0 +1,70 @@
+package rsfs;
+
+enum StatusCode {
+    kUnDefined = 0;
+    // master
+    kMasterNotInited = 12;
+    kMasterIsBusy = 13;
+    kMasterIsSecondary = 14;
+    kMasterIsReadonly = 15;
+    kMasterOnRestore = 16;
+    kMasterOnWait = 17;
+    kMasterIsRunning = 19;
+
+    // snode
+    kSNodeNotInited = 22;
+    kSNodeIsBusy = 23;
+    kSNodeIsIniting = 24;
+    kSNodeIsReadonly = 25;
+    kSNodeIsRunning = 29;
+    kSNodeNotStream = 30;
+    kSNodeErrStream = 31;
+    
+    // ACL & system
+    kIllegalAccess = 71;
+    kNotPermission = 72;
+    kIOError = 73;
+    kBadParameter = 74;
+
+    //// master rpc ////
+
+    kMasterOk = 200;
+    kMasterNotAlloc = 201;
+
+    // register
+    kInvalidSequenceId = 304;
+    kInvalidTabletNodeInfo = 305;
+
+    // report
+    kSNodeNotRegistered = 306;
+    kSNodeNotExist = 307;
+
+    // cmdctrl
+    kInvalidArgument = 310;
+
+    //// tablet node rpc ////
+
+    // response
+    kSNodeOk = 40;
+
+    // key
+    kKeyNotExist = 402;
+    kKeyNotInRange = 403;
+    
+    // meta table
+    kMetaTabletError = 500;
+
+    // RPC
+    kRPCError = 700;
+    kServerError = 701;
+    kClientError = 702;
+    kConnectError = 703;
+    kRPCTimeout = 704;
+
+    // meta tree
+    kMetaNotInited = 801;
+    kMetaReadOpen = 802;
+    kMetaWriteOpen = 803;
+    kMetaReady = 804;
+}
+

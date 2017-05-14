@@ -1,0 +1,68 @@
+import "sofa/pbrpc/rpc_option.proto";
+import "status_code.proto";
+
+package rsfs;
+
+message OpenDataRequest {
+    enum Type {
+        SEQ_READ = 1;
+        RANDOM_READ = 2;
+        APPEND = 3;
+    }
+    required uint64 sequence_id = 1;
+    required uint64 block_id = 2;
+    required Type mode = 3;
+}
+
+message OpenDataResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+message CloseDataRequest {
+    required uint64 sequence_id = 1;
+    required uint64 block_id = 2;
+}
+
+message CloseDataResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+message WriteDataRequest {
+    required uint64 sequence_id = 1;
+    optional uint64 block_id = 2;
+    optional bytes payload = 3;
+}
+
+message WriteDataResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+message ReadDataRequest {
+    enum Type {
+        SEQ_READ = 1;
+        RANDOM_READ = 2;
+    }
+    required uint64 sequence_id = 1;
+    required Type type = 2;
+    required uint64 block_id = 3;
+    optional uint64 payload_size = 4;
+    optional uint64 offset = 5;
+}
+
+message ReadDataResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    optional bytes payload = 3;
+}
+
+service SNodeServer {
+    rpc OpenData(OpenDataRequest) returns(OpenDataResponse);
+    rpc CloseData(CloseDataRequest) returns(CloseDataResponse);
+
+    rpc WriteData(WriteDataRequest) returns(WriteDataResponse);
+    rpc ReadData(ReadDataRequest) returns(ReadDataResponse);
+}
+option cc_generic_services = true;

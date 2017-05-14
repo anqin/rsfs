@@ -1,0 +1,90 @@
+import "sofa/pbrpc/rpc_option.proto";
+import "status_code.proto";
+import "snode_info.proto";
+import "meta_tree.proto";
+
+package rsfs;
+
+message OpenFileRequest {
+    enum Type {
+        SEQ_READ = 1;
+        RANDOM_READ = 2;
+        WRITE = 3;
+    }
+    required uint64 sequence_id = 1;
+    required string file_name = 2;
+    required Type type = 3;
+    optional uint32 node_num = 4;
+}
+
+message OpenFileResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    optional uint64 fid = 3;
+    repeated SNodeInfo nodes = 4;
+    optional uint64 file_size = 5;
+    optional int64 tail_slice = 6 [default = -1];
+    optional uint32 tail_num = 7 [default = 0];
+    optional int64 crash_slice = 8 [default = -1];
+    optional uint32 crash_num = 9 [default = 0];
+}
+
+message CloseFileRequest {
+    required uint64 sequence_id = 1;
+    required string file_name = 2;
+    optional uint64 file_size = 3;
+    optional int64 tail_slice = 4 [default = -1];
+    optional uint32 tail_num = 5 [default = 0];
+    optional int64 crash_slice = 6 [default = -1];
+    optional uint32 crash_num = 7 [default = 0];
+}
+
+message CloseFileResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+message ListFileRequest {
+    required uint64 sequence_id = 1;
+    optional string path_start = 2;
+    optional string path_end = 3;
+    required uint64 limit = 4;
+}
+
+message ListFileResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    repeated TreeNode metas = 3;
+    optional string last_one = 4;
+}
+
+message RegisterRequest {
+    required uint64 sequence_id = 1;
+    required SNodeInfo snode_info = 2;    
+}
+
+message RegisterResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+message ReportRequest {
+    required uint64 sequence_id = 1;
+    required SNodeInfo snode_info = 2;
+}
+
+message ReportResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+service MasterServer {
+    rpc OpenFile(OpenFileRequest) returns(OpenFileResponse);
+    rpc CloseFile(CloseFileRequest) returns(CloseFileResponse);
+    rpc ListFile(ListFileRequest) returns(ListFileResponse);
+    
+    rpc Register(RegisterRequest) returns(RegisterResponse);
+    rpc Report(ReportRequest) returns(ReportResponse);
+}
+
+option cc_generic_services = true;
